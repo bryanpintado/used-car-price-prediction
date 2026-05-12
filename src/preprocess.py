@@ -1,6 +1,11 @@
+from pathlib import Path
 import pandas as pd
 
-def load_data(path):
+BASE_DIR = Path(__file__).resolve().parents[1]
+RAW_DATA_PATH = BASE_DIR / "data" / "raw" / "train.csv"
+PROCESSED_DATA_PATH = BASE_DIR / "data" / "processed" / "cleaned_used_cars.csv"
+
+def load_data(path=RAW_DATA_PATH):
     return pd.read_csv(path)
 
 def clean_data(df):
@@ -19,7 +24,10 @@ def clean_data(df):
     return df
 
 if __name__ == "__main__":
-    df = load_data("data/raw/train.csv")
+    df = load_data()
     cleaned_df = clean_data(df)
-    cleaned_df.to_csv("data/processed/cleaned_used_cars.csv", index=False)
-    print("Cleaned data saved to data/processed/cleaned_used_cars.csv")
+
+    PROCESSED_DATA_PATH.parent.mkdir(parents=True, exist_ok=True)
+    cleaned_df.to_csv(PROCESSED_DATA_PATH, index=False)
+
+    print(f"Cleaned data saved to {PROCESSED_DATA_PATH}")
